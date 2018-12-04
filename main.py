@@ -12,9 +12,11 @@ conf = yaml.load(open('app.yaml'))
 db_host = conf['database']['host']
 db_port = conf['database']['port']
 db_user = conf['database']['user']
-db_pass = conf['database']['pass']
+db_pass = conf['database']['password']
 
-engine = sqlalchemy.create_engine('mysql+pymysql://' + db_user + ':' + db_pass + '@' + db_host + ':' + db_port + '/rss_feed_items')
+connection_string = 'mysql+pymysql://' + db_user + ':' + db_pass + '@' + db_host + ':' + str(db_port) + '/rss_feed_items'
+# print(connection_string)
+engine = sqlalchemy.create_engine(connection_string)
 
 
 def get_feeds():
