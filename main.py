@@ -32,7 +32,7 @@ def get_feeds():
                 desc = entry.description.strip().encode('utf-8')
                 item['description'] = desc[:255] if len(desc) > 256 else desc
             """
-            item['description'] = 'Removed by Code'
+            # item['description'] = 'Removed by Code'
             item['guid'] = entry.guid.strip().encode('utf-8')
             item['link'] = entry.link.strip().encode('utf-8')
             item['pubDate'] = entry.published
