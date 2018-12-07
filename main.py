@@ -7,6 +7,7 @@ import sys
 import time
 import sqlalchemy
 import yaml
+import uuid
 
 conf = yaml.load(open('app.yaml'))
 db_host = conf['database']['host']
@@ -23,6 +24,7 @@ def get_feeds():
     rss_sources = pd.read_csv('rss_sources.csv')
     feeds = pd.DataFrame()
     for index, row in rss_sources.iterrows():
+        print('Checking : ' + str(row['source'].strip().encode('utf-8')) + ' : ' + str(row['rss_url']))
         data = feedparser.parse(row['rss_url'])
 
         for entry in data.entries:
@@ -33,7 +35,10 @@ def get_feeds():
                 item['description'] = desc[:255] if len(desc) > 256 else desc
             """
             # item['description'] = 'Removed by Code'
-            item['guid'] = entry.guid.strip().encode('utf-8')
+            if entry.get("guid") is not None:
+                item['guid'] = entry.guid.strip().encode('utf-8')
+            else:
+                item['guid'] = str(uuid.uuid4())
             item['link'] = entry.link.strip().encode('utf-8')
             item['pubDate'] = entry.published
             item['title'] = entry.title.strip().encode('utf-8')

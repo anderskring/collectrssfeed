@@ -4,3 +4,4 @@ PyMySQL
 sqlalchemy
 feedparser
 pyyaml
+uuid
