@@ -6,7 +6,7 @@ import sqlalchemy
 import yaml
 import uuid
 
-conf = yaml.load(open('test_app.yaml'))
+conf = yaml.load(open('app.yaml'))
 db_host = conf['database']['host']
 db_port = conf['database']['port']
 db_user = conf['database']['user']
