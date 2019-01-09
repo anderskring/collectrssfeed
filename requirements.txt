@@ -1,7 +1,9 @@
-numpy
 pandas
 PyMySQL
 sqlalchemy
 feedparser
 pyyaml
 uuid
+nltk
+python-twitter
+schedule

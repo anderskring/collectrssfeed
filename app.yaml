@@ -3,3 +3,46 @@ database:
   port: 3306
   user: root
   password: root
+
+twitter:
+  consumer_key: R2u8PJteCpwpqWf7dPcBC854p
+  consumer_secret: aK9l53L4A1yr2Rrc73VoWPlnywBssXSFIC0OPSZgkBYdyD7UyP
+  access_token_key: 121708124-grJFGeFv73HFqKEq3Tncnm7RoS8RueUGE9iXEvlo
+  access_token_secret: b2vl85N1dtJPfzDI0h1Sxlkh5BaJPjDN80fzm67hWSyxu
+
+twitter_user_lists:
+  - type : Politiker
+    list_id : 975098838791983106
+    limit : 1000
+  - type : Partier
+    list_id: 100483010
+    limit : 1000
+  - type : Journalister
+    list_id : 9053023
+    limit : 500
+
+rss_feed_sources:
+  - rss_url : http://www.b.dk/seneste/rss
+    source : Berlingske
+  - rss_url: http://politiken.dk/rss/senestenyt.rss
+    source : Politiken
+  - rss_url : http://ekstrabladet.dk/rssfeed/all/
+    source : Ekstrabladet
+  - rss_url : http://www.bt.dk/bt/seneste/rss
+    source : BT
+  - rss_url : http://jyllands-posten.dk/?service=rssfeed&submode=topnyheder
+    source : Jyllands Posten
+  - rss_url : http://borsen.dk/rss/
+    source : Borsen
+  - rss_url : http://www.kristeligt-dagblad.dk/rss/nyheder
+    source : Kristeligt Dagblad
+  - rss_url : http://feeds.tv2.dk/nyheder/rss
+    source : TV 2
+  - rss_url : https://ing.dk/rss/nyheder
+    source : Ingenioeren
+  - rss_url : https://www.dr.dk/nyheder/service/feeds/allenyheder
+    source : DR
+  - rss_url : https://www.information.dk/feed
+    source : Information
+  - rss_url : https://www.jv.dk/rss/nyheder
+    source : Jydske Vestkysten
