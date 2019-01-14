@@ -66,6 +66,7 @@ def update_list_users():
 
 
 def update_tweets(limit=20):
+    print("----------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     logging.info("----------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     user_list = []
     sql = "SELECT user_id, screen_name, latest_tweet_id FROM twitter_feeds.table_users WHERE get_tweets = 1 ORDER BY last_tweet_fetch LIMIT %s" % limit
@@ -119,7 +120,8 @@ def update_tweets(limit=20):
             sql += " WHERE user_id =" + str(user['user_id'])
             sql_engine.execute(sql)
 
-            logging.info(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
+            print(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
+            #logging.info(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
 
         except TwitterError:
             logging.info('TwitterError : User is Private... Ignoring Feed')
