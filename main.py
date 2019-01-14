@@ -1,8 +1,12 @@
 import collect_rss_feed
 import collect_twitter_feed
 
+import google.cloud.logging
 import schedule
 import time
+
+client = google.cloud.logging.Client()
+client.setup_logging()
 
 schedule.every(10).minutes.do(collect_rss_feed.collect_feed)
 schedule.every().minutes.do(collect_twitter_feed.update_tweets, limit=20)

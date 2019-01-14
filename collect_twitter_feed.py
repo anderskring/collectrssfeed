@@ -2,6 +2,7 @@ from datetime import datetime
 import sqlalchemy
 import yaml
 import twitter
+import logging
 from twitter import TwitterError
 
 conf = yaml.load(open('app.yaml'))
@@ -26,7 +27,7 @@ twitter_api = twitter.Api(consumer_key=twitter_consumer_key,
 
 
 def update_list_users():
-    print("----------------------Updating Twitter Users %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    logging.info("----------------------Updating Twitter Users %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     for twitter_list in conf['twitter_user_lists']:
         list_id = twitter_list['list_id']
         list_type = twitter_list['type']
@@ -49,12 +50,12 @@ def update_list_users():
                 must_update = True
 
             if must_update:
-                print("Getting members of list : " + list_type + "(" + str(list_id) + ")")
+                logging.info("Getting members of list : " + list_type + "(" + str(list_id) + ")")
                 members = twitter_api.GetListMembers(list_id=list_id)
                 members.sort(key=lambda x: x.followers_count, reverse=True)
                 members = members[0:limit]
                 for member in members:
-                    print(member.name)
+                    logging.info(member.name)
                     sql = "INSERT INTO twitter_feeds.table_users (user_id, name, screen_name, description, profile_image_url, get_tweets, last_updated_timestamp, type) VALUES ('%s', '%s', '%s', '%s', '%s', %i, DATE(now()) , '%s') " % (member.id, member.name.replace("'", ""), member.screen_name, member.description.replace("'", "´").replace("%", "%%"), member.profile_image_url, 1, list_type)
                     sql += "ON DUPLICATE KEY UPDATE name = '%s', screen_name = '%s', description = '%s', profile_image_url = '%s', type = '%s', get_tweets = 1, last_updated_timestamp = DATE(now())" % (member.name.replace("'", ""), member.screen_name, member.description.replace("'", "´").replace("%", "%%"), member.profile_image_url, list_type)
                     sql_engine.execute(sql)
@@ -65,7 +66,7 @@ def update_list_users():
 
 
 def update_tweets(limit=20):
-    print("----------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    logging.info("----------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     user_list = []
     sql = "SELECT user_id, screen_name, latest_tweet_id FROM twitter_feeds.table_users WHERE get_tweets = 1 ORDER BY last_tweet_fetch LIMIT %s" % limit
     result = sql_engine.execute(sql)
@@ -118,9 +119,9 @@ def update_tweets(limit=20):
             sql += " WHERE user_id =" + str(user['user_id'])
             sql_engine.execute(sql)
 
-            print(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
+            logging.info(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
 
         except TwitterError:
-            print('TwitterError : User is Private... Ignoring Feed')
+            logging.info('TwitterError : User is Private... Ignoring Feed')
             sql = "UPDATE twitter_feeds.table_users SET get_tweets = 0 WHERE user_id = %i" % user['user_id']
             sql_engine.execute(sql)

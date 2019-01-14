@@ -7,3 +7,4 @@ uuid
 nltk
 python-twitter
 schedule
+google-cloud-logging

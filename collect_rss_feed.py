@@ -3,6 +3,7 @@ from datetime import datetime
 import pandas as pd
 import feedparser
 import sqlalchemy
+import logging
 import yaml
 import uuid
 
@@ -20,7 +21,7 @@ def get_feeds():
     rss_sources = conf['rss_feed_sources']
     feeds = pd.DataFrame()
     for rss_source in rss_sources:
-        print('Checking : ' + str(rss_source['source'].strip().encode('utf-8')) + ' : ' + str(rss_source['rss_url']))
+        logging.info('Checking : ' + str(rss_source['source'].strip().encode('utf-8')) + ' : ' + str(rss_source['rss_url']))
         data = feedparser.parse(rss_source['rss_url'])
 
         for entry in data.entries:
@@ -40,7 +41,7 @@ def get_feeds():
 
 
 def store_items(data_frame):
-    # print(data_frame)
+    # logging.info(data_frame)
     data_frame.to_sql(name='feed_items', con=engine, index=False, if_exists='append')
 
 
@@ -59,11 +60,11 @@ def get_last_updated_article():
 
 
 def collect_feed():
-    print("----------------------Collecting RSS Feeds %s ----------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    logging.info("----------------------Collecting RSS Feeds %s ----------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     last_update_time = get_last_updated_article()
     feeds = get_feeds()
     mask1 = last_update_time < feeds['pubDate']
     mask2 = feeds['pubDate'] < datetime.now()
     feeds = feeds[mask1 & mask2]
-    print('We have ' + str(len(feeds)) + ' new articles since ' + last_update_time.strftime("%Y-%m-%d %H:%M"))
+    logging.info('We have ' + str(len(feeds)) + ' new articles since ' + last_update_time.strftime("%Y-%m-%d %H:%M"))
     store_items(feeds)
