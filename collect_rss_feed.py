@@ -60,13 +60,13 @@ def get_last_updated_article():
 
 
 def collect_feed():
-    print("----------------------Collecting RSS Feeds %s ----------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
-    #logging.info("----------------------Collecting RSS Feeds %s ----------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    #print("----------------------Collecting RSS Feeds %s ----------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    logging.info("----------------------Collecting RSS Feeds %s ----------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     last_update_time = get_last_updated_article()
     feeds = get_feeds()
     mask1 = last_update_time < feeds['pubDate']
     mask2 = feeds['pubDate'] < datetime.now()
     feeds = feeds[mask1 & mask2]
-    print('We have ' + str(len(feeds)) + ' new articles since ' + last_update_time.strftime("%Y-%m-%d %H:%M"))
-    #logging.info('We have ' + str(len(feeds)) + ' new articles since ' + last_update_time.strftime("%Y-%m-%d %H:%M"))
+    #print('We have ' + str(len(feeds)) + ' new articles since ' + last_update_time.strftime("%Y-%m-%d %H:%M"))
+    logging.info('We have ' + str(len(feeds)) + ' new articles since ' + last_update_time.strftime("%Y-%m-%d %H:%M"))
     store_items(feeds)
