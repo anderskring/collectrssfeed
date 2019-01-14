@@ -27,7 +27,8 @@ twitter_api = twitter.Api(consumer_key=twitter_consumer_key,
 
 
 def update_list_users():
-    logging.info("----------------------Updating Twitter Users %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    print("out-------------------Updating Twitter Users %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    logging.info("log-------------------Updating Twitter Users %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     for twitter_list in conf['twitter_user_lists']:
         list_id = twitter_list['list_id']
         list_type = twitter_list['type']
@@ -66,8 +67,8 @@ def update_list_users():
 
 
 def update_tweets(limit=20):
-    #print("----------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
-    logging.info("----------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    print("out-------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+    logging.info("log-------------------Updating Twitter Feeds %s ------------------" % datetime.now().strftime("%Y-%m-%d %H:%M"))
     user_list = []
     sql = "SELECT user_id, screen_name, latest_tweet_id FROM twitter_feeds.table_users WHERE get_tweets = 1 ORDER BY last_tweet_fetch LIMIT %s" % limit
     result = sql_engine.execute(sql)
@@ -120,10 +121,11 @@ def update_tweets(limit=20):
             sql += " WHERE user_id =" + str(user['user_id'])
             sql_engine.execute(sql)
 
-            #print(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
-            logging.info(str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
+            print('out ' + str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
+            logging.info('log ' + str(added_tweet_count) + '/' + str(added_retweets_count) + '/' + str(added_new_user) + ' User : ' + user['screen_name'] + ' (' + str(user['user_id']) + ')')
 
         except TwitterError:
+            print('TwitterError : User is Private... Ignoring Feed')
             logging.info('TwitterError : User is Private... Ignoring Feed')
             sql = "UPDATE twitter_feeds.table_users SET get_tweets = 0 WHERE user_id = %i" % user['user_id']
             sql_engine.execute(sql)
