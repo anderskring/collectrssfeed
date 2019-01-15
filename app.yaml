@@ -19,7 +19,7 @@ twitter_user_lists:
     limit : 1000
   - type : Journalister
     list_id : 9053023
-    limit : 500
+    limit : 400
 
 rss_feed_sources:
   - rss_url : http://www.b.dk/seneste/rss
